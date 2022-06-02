@@ -13,11 +13,14 @@ const tracer = TraceAgent.start({
   ignoreMethods: ['get'], // ignore requests with OPTIONS method (case-insensitive).
 });
 
-export { tracer };
 
 // Declare a route
 fastify.get('/', function (request, reply) {
-  reply.send('The serve is working')
+  const retireveClient = tracer.createChildSpan({
+    name: 'get request test',
+  });
+  reply.send('The server is working....')
+  retireveClient.endSpan();
 })
 
 fastify.post('/cash_registers',async function (request, reply) {
